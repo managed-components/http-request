@@ -1,0 +1,28 @@
+{
+  "name": "http-request",
+  "namespace": "http-request",
+  "description": "An MC to send HTTP requests",
+  "icon": "assets/icon.svg",
+  "permissions": {
+    "provide_ecommerce": {
+      "description": "This permission is used to send Ecommerce info",
+      "required": true
+    },
+    "provide_client_events": {
+      "description": "This permission is used to fire on client event",
+      "required": true
+    },
+    "provide_manager_events": {
+      "description": "This permission is used to fire on events",
+      "required": true
+    },
+    "provide_user_events": {
+      "description": "This permission is used to fire on user generated events",
+      "required": true
+    },
+    "provide_pageviews": {
+      "description": "This permission is used to fire on Pageviews",
+      "required": true
+    }
+  }
+}
