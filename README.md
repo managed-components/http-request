@@ -30,9 +30,9 @@ There are no tool-level settings required for this MC.
 
 `endpoint` specifies the server endpoint URL to which the request should be sent.
 
-### Method `String` _required_
+### Method `String` _optional_
 
-`method` specifies the HTTP request method you wish to use. There are three accepted values: `post`, `post urlencoded`, and `get`.
+`method` specifies the HTTP request method you wish to use. There are three accepted values: `post`, `post urlencoded`, and `get`. If you do not specify the method, it will default to GET.
 
 ## 📝 License
 
