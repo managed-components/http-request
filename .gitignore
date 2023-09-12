@@ -1,13 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 
-.all-contributorsrc
-.eslintrc.js
-.github/workflows
-.prettierrc
-esbuild.js
-tsconfig.build.json
-tsconfig.json
+
 
 ### Node ###
 # Logs
