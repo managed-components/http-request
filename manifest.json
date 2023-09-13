@@ -1,0 +1,7 @@
+{
+  "name": "http-request",
+  "namespace": "http-request",
+  "description": "An MC to send HTTP requests",
+  "icon": "assets/icon.svg",
+  "permissions": {}
+}
