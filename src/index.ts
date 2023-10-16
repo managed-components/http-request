@@ -1,11 +1,11 @@
 import { Manager, MCEvent } from '@managed-components/types'
 import { flattenKeys } from './utils'
 
-function handleEvents(event: MCEvent) {
+function handleEvents(manager: Manager, event: MCEvent) {
   if (event.payload.method && event.payload.method.startsWith('post')) {
-    sendPostRequest(event)
+    sendPostRequest(manager, event)
   } else {
-    sendGetRequest(event)
+    sendGetRequest(manager, event)
   }
 }
 
@@ -20,8 +20,8 @@ export function createRequestBody(event: MCEvent) {
   return requestBody
 }
 
-export function sendPostRequest(event: MCEvent) {
-  fetch(`${event.payload.endpoint}`, {
+export function sendPostRequest(manager: Manager, event: MCEvent) {
+  manager.fetch(`${event.payload.endpoint}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -42,12 +42,16 @@ export function constructGetRequestUrl(event: MCEvent) {
   return url
 }
 
-export function sendGetRequest(event: MCEvent) {
-  fetch(`${constructGetRequestUrl(event)}`)
+export function sendGetRequest(manager: Manager, event: MCEvent) {
+  manager.fetch(`${constructGetRequestUrl(event)}`)
 }
 
 // Event listeners
 export default async function (manager: Manager) {
-  await manager.addEventListener('event', handleEvents)
-  await manager.addEventListener('ecommerce', handleEvents)
+  manager.addEventListener('event', (event: MCEvent) => {
+    return handleEvents(manager, event)
+  })
+  manager.addEventListener('ecommerce', (event: MCEvent) => {
+    return handleEvents(manager, event)
+  })
 }
