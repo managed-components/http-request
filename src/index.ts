@@ -2,8 +2,9 @@ import { Manager, MCEvent } from '@managed-components/types'
 import { flattenKeys } from './utils'
 
 function handleEvents(manager: Manager, event: MCEvent) {
-  if (!event.payload.endpoint) return
-  if (event.payload.method && event.payload.method.startsWith('post')) {
+  const { endpoint, method } = event.payload
+  if (!endpoint) return
+  if (method && method.startsWith('post')) {
     sendPostRequest(manager, event)
   } else {
     sendGetRequest(manager, event)
