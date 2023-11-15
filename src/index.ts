@@ -30,7 +30,9 @@ export function sendPostRequest(manager: Manager, event: MCEvent) {
       },
       body: JSON.stringify(createRequestBody(event)),
     })
-  } catch {}
+  } catch {
+    // empty
+  }
 }
 
 // Functions related to get requests
@@ -48,7 +50,9 @@ export function constructGetRequestUrl(event: MCEvent) {
 export function sendGetRequest(manager: Manager, event: MCEvent) {
   try {
     manager.fetch(`${constructGetRequestUrl(event)}`)
-  } catch {}
+  } catch {
+    // empty
+  }
 }
 
 // Event listeners
