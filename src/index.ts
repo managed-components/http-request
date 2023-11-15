@@ -2,6 +2,7 @@ import { Manager, MCEvent } from '@managed-components/types'
 import { flattenKeys } from './utils'
 
 function handleEvents(manager: Manager, event: MCEvent) {
+  if (!event.payload.endpoint) return
   if (event.payload.method && event.payload.method.startsWith('post')) {
     sendPostRequest(manager, event)
   } else {
@@ -21,13 +22,15 @@ export function createRequestBody(event: MCEvent) {
 }
 
 export function sendPostRequest(manager: Manager, event: MCEvent) {
-  manager.fetch(`${event.payload.endpoint}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(createRequestBody(event)),
-  })
+  try {
+    manager.fetch(`${event.payload.endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(createRequestBody(event)),
+    })
+  } catch {}
 }
 
 // Functions related to get requests
@@ -43,7 +46,9 @@ export function constructGetRequestUrl(event: MCEvent) {
 }
 
 export function sendGetRequest(manager: Manager, event: MCEvent) {
-  manager.fetch(`${constructGetRequestUrl(event)}`)
+  try {
+    manager.fetch(`${constructGetRequestUrl(event)}`)
+  } catch {}
 }
 
 // Event listeners
