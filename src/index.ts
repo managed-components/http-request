@@ -9,7 +9,7 @@ function handleEvents(manager: Manager, event: MCEvent) {
       sendGetRequest(manager, event)
     }
   } catch {
-    //emtpy
+    //empty
   }
 }
 
