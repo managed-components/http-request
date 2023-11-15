@@ -6,3 +6,5 @@ src
 esbuild.js
 tsconfig.build.json
 tsconfig.json
+eslintrc.js
+prettierrc.txt
