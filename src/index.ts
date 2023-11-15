@@ -4,7 +4,7 @@ import { flattenKeys } from './utils'
 function handleEvents(manager: Manager, event: MCEvent) {
   const { endpoint, method } = event.payload
   if (!endpoint) return
-  if (method && method.startsWith('post')) {
+  if (method?.startsWith('post')) {
     sendPostRequest(manager, event)
   } else {
     sendGetRequest(manager, event)
