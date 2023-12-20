@@ -1,9 +1,16 @@
 import { Manager, MCEvent } from '@managed-components/types'
 import { flattenKeys } from './utils'
 
+const SETTING_PREFIX = '__setting_'
+
+function getSettingField(payload: MCEvent['payload'], key: string) {
+  return payload[SETTING_PREFIX + key] || payload[key]
+}
+
 function handleEvents(manager: Manager, event: MCEvent) {
+  const method = getSettingField(event.payload, 'method')
   try {
-    if (event.payload.method?.startsWith('post')) {
+    if (method?.startsWith('post')) {
       sendPostRequest(manager, event)
     } else {
       sendGetRequest(manager, event)
@@ -15,17 +22,23 @@ function handleEvents(manager: Manager, event: MCEvent) {
 
 export function createRequestBody(event: MCEvent) {
   let requestBody = { ...event.payload }
-  delete requestBody.method
-  delete requestBody.endpoint
-  delete requestBody.ecommerce
-  if (event.payload.method && event.payload.method.endsWith('urlencoded')) {
+  const method = getSettingField(requestBody, 'method')
+  ;['method', 'endpoint', 'ecommerce'].forEach(key => {
+    if (requestBody[SETTING_PREFIX + key]) {
+      delete requestBody[SETTING_PREFIX + key]
+    } else {
+      delete requestBody[key]
+    }
+  })
+
+  if (method && method.endsWith('urlencoded')) {
     requestBody = new URLSearchParams(flattenKeys(requestBody)).toString()
   }
   return requestBody
 }
 
 export function sendPostRequest(manager: Manager, event: MCEvent) {
-  manager.fetch(`${event.payload.endpoint}`, {
+  manager.fetch(`${getSettingField(event.payload, 'endpoint')}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,7 +50,7 @@ export function sendPostRequest(manager: Manager, event: MCEvent) {
 // Functions related to get requests
 export function constructGetRequestUrl(event: MCEvent) {
   const requestBody = createRequestBody(event)
-  const url = new URL(`${event.payload.endpoint}`)
+  const url = new URL(`${getSettingField(event.payload, 'endpoint')}`)
   for (const [key, val] of new URLSearchParams(
     flattenKeys(requestBody)
   ).entries()) {
