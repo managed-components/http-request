@@ -1,14 +1,11 @@
 import { Manager, MCEvent } from '@managed-components/types'
 import { flattenKeys } from './utils'
 
-const SETTING_PREFIX = '__setting_'
-
-function getSettingField(payload: MCEvent['payload'], key: string) {
-  return payload[SETTING_PREFIX + key] || payload[key]
-}
+const METHOD_KEY = '__setting_method'
+const ENDPOINT_KEY = '__setting_endpoint'
 
 function handleEvents(manager: Manager, event: MCEvent) {
-  const method = getSettingField(event.payload, 'method')
+  const method = event.payload[METHOD_KEY]
   try {
     if (method?.startsWith('post')) {
       sendPostRequest(manager, event)
@@ -22,13 +19,9 @@ function handleEvents(manager: Manager, event: MCEvent) {
 
 export function createRequestBody(event: MCEvent) {
   let requestBody = { ...event.payload }
-  const method = getSettingField(requestBody, 'method')
-  ;['method', 'endpoint', 'ecommerce'].forEach(key => {
-    if (requestBody[SETTING_PREFIX + key]) {
-      delete requestBody[SETTING_PREFIX + key]
-    } else {
-      delete requestBody[key]
-    }
+  const method = requestBody[METHOD_KEY]
+  ;[METHOD_KEY, ENDPOINT_KEY, 'ecommerce'].forEach(key => {
+    delete requestBody[key]
   })
 
   if (method && method.endsWith('urlencoded')) {
@@ -38,7 +31,7 @@ export function createRequestBody(event: MCEvent) {
 }
 
 export function sendPostRequest(manager: Manager, event: MCEvent) {
-  manager.fetch(`${getSettingField(event.payload, 'endpoint')}`, {
+  manager.fetch(`${event.payload[ENDPOINT_KEY]}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -50,7 +43,7 @@ export function sendPostRequest(manager: Manager, event: MCEvent) {
 // Functions related to get requests
 export function constructGetRequestUrl(event: MCEvent) {
   const requestBody = createRequestBody(event)
-  const url = new URL(`${getSettingField(event.payload, 'endpoint')}`)
+  const url = new URL(`${event.payload[ENDPOINT_KEY]}`)
   for (const [key, val] of new URLSearchParams(
     flattenKeys(requestBody)
   ).entries()) {
