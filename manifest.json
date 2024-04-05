@@ -3,5 +3,10 @@
   "namespace": "http-request",
   "description": "An MC to send HTTP requests",
   "icon": "assets/icon.svg",
-  "permissions": {}
+  "permissions": {
+    "server_network_requests": {
+      "description": "HTTP tool uses serverside network requests to report data",
+      "required": true
+    }
+  }
 }
